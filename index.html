@@ -1,1 +1,495 @@
+Вот код современного минималистичного многостраничного сайта-гайда для начинающих художников. Использован шрифт **Inter** (модный гротеск), плавный скролл, карточки с темами и отдельные страницы для каждого раздела.
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ХУДОЖНИК.LIGHT | Гайд по основам</title>
+    <!-- Модный шрифт Inter (современный гротеск) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fefefe;
+            color: #1a1a1a;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* минималистичная навигация */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: rgba(254, 254, 254, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #eaeaea;
+            padding: 1rem 2rem;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #2c2c2c, #5a5a5a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #2c2c2c;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #8b8b8b;
+        }
+
+        /* основные контейнеры */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* hero-секция */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 3rem;
+            background: #faf9f8;
+            border-bottom: 1px solid #efefef;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            background: linear-gradient(145deg, #171717, #4b4b4b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #4a4a4a;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* карточки-навигация по темам (сетка) */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .topic-card {
+            background: #ffffff;
+            border: 1px solid #ededed;
+            border-radius: 28px;
+            padding: 1.8rem 1.5rem;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            border-color: #cdcdcd;
+            box-shadow: 0 15px 25px -12px rgba(0,0,0,0.05);
+        }
+
+        .topic-icon {
+            font-size: 2.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .topic-card h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.02em;
+        }
+
+        .topic-card p {
+            font-size: 0.95rem;
+            color: #5a5a5a;
+            line-height: 1.4;
+        }
+
+        /* отдельный стиль для страниц-разделов */
+        .section-page {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+        }
+
+        .section-page h1 {
+            font-size: 2.8rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+            border-left: 5px solid #c0c0c0;
+            padding-left: 1.2rem;
+        }
+
+        .section-page h2 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin: 2rem 0 1rem;
+            color: #2d2d2d;
+        }
+
+        .section-page h3 {
+            font-weight: 600;
+            margin: 1.5rem 0 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .section-page p {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+            color: #2b2b2b;
+        }
+
+        .tip-box {
+            background: #f7f7f7;
+            border-radius: 24px;
+            padding: 1.4rem 1.8rem;
+            margin: 1.8rem 0;
+            border-left: 4px solid #9e9e9e;
+        }
+
+        .tip-box strong {
+            font-weight: 600;
+        }
+
+        hr {
+            margin: 2rem 0;
+            border: none;
+            height: 1px;
+            background: #eaeaea;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 3rem;
+            padding: 0.6rem 1.4rem;
+            background: #f0f0f0;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #1f1f1f;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .back-home:hover {
+            background: #e3e3e3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #efefef;
+            font-size: 0.8rem;
+            color: #8f8f8f;
+            background: #fefefe;
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .section-page h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- навигация (все ссылки ведут на внутренние страницы, роутинг через hash или отдельные html? 
+     для чистоты SPA-подхода используем простые ссылки с хешами + показываем соответствующий контент через JS. 
+     Это будет минималистичный одностраничник с виртуальными "страницами" — быстро и без сервера -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">LIGHT·GUIDE</div>
+        <ul class="nav-links">
+            <li><a href="#" data-page="home">Главная</a></li>
+            <li><a href="#" data-page="light">Свет</a></li>
+            <li><a href="#" data-page="color">Цвет</a></li>
+            <li><a href="#" data-page="composition">Композиция</a></li>
+            <li><a href="#" data-page="anatomy">Анатомия</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- основной контент: здесь будут динамически подменяться страницы -->
+<main id="app-root">
+    <!-- сюда будет вставлен контент через JS -->
+    <div style="text-align: center; padding: 4rem;">Загрузка...</div>
+</main>
+
+<footer>
+    <p>✶ минималистичный гайд для начинающих художников ✶<br>свет, цвет, композиция, анатомия — учимся видеть</p>
+</footer>
+
+<script>
+    // ---- Данные для каждой "страницы" (контент) ----
+    const pages = {
+        home: {
+            title: "Главная",
+            render: () => `
+                <div class="hero">
+                    <h1>начинающим художникам</h1>
+                    <p>Свет, цвет, композиция, анатомия — простые правила, которые меняют всё</p>
+                </div>
+                <div class="container">
+                    <h2 style="font-weight:500; margin-bottom:1rem;">основные разделы</h2>
+                    <div class="topics-grid">
+                        <a href="#" class="topic-card" data-page="light">
+                            <div class="topic-icon">☀️</div>
+                            <h3>Свет</h3>
+                            <p>Как управлять тоном, тенями и источниками света. Светотень, рефлексы.</p>
+                        </a>
+                        <a href="#" class="topic-card" data-page="color">
+                            <div class="topic-icon">🎨</div>
+                            <h3>Цвет</h3>
+                            <p>Теория цвета, гармонии, температура, насыщенность — понятная палитра.</p>
+                        </a>
+                        <a href="#" class="topic-card" data-page="composition">
+                            <div class="topic-icon">◧</div>
+                            <h3>Композиция</h3>
+                            <p>Золотое сечение, правило третей, ритм и центры внимания.</p>
+                        </a>
+                        <a href="#" class="topic-card" data-page="anatomy">
+                            <div class="topic-icon">🧍</div>
+                            <h3>Анатомия</h3>
+                            <p>Пропорции тела, лица, основные костные и мышечные ориентиры.</p>
+                        </a>
+                    </div>
+                    <div class="tip-box" style="margin-top: 3rem;">
+                        <strong>💡 совет дня</strong><br>
+                        Делайте быстрые наброски каждый день. Даже 10 минут скетчинга тренируют глаз и руку. 
+                        Ошибки — это путь к стилю.
+                    </div>
+                </div>
+            `
+        },
+        light: {
+            title: "Свет",
+            render: () => `
+                <div class="section-page">
+                    <h1>☀️ Свет и тень</h1>
+                    <p>Свет формирует объем, настроение и глубину. Чтобы рисунок "дышал", важно понимать: тон важнее цвета на первых этапах.</p>
+                    <h2>⚡ основы светотени</h2>
+                    <p><strong>Собственная тень</strong> — затемненная сторона предмета. <strong>Падающая тень</strong> — тень, которую объект отбрасывает на поверхность. <strong>Рефлекс</strong> — отраженный свет от соседних предметов, всегда чуть светлее собственной тени.</p>
+                    <div class="tip-box">
+                        <strong>✨ практика:</strong> нарисуйте шар и куб при боковом освещении. Проработайте 5 тонов: свет, полутон, тень, рефлекс, блик.
+                    </div>
+                    <h2>🎭 типы освещения</h2>
+                    <p><strong>Фронтальный свет</strong> — делает объект плоским. <strong>Боковой свет</strong> — выявляет фактуру, объём (классика). <strong>Контровой свет (контражур)</strong> — силуэт, драматичность. <strong>Мягкий свет</strong> (пасмурно) — плавные переходы, мало контраста.</p>
+                    <h2>📌 рекомендация для художника</h2>
+                    <p>Начинайте рисунок с пятна тона. Сначала определите самые темные и самые светлые участки. Используйте растушевку или штрих по форме.</p>
+                    <hr>
+                    <p><em>«Свет и тень — это правда формы. Не бойтесь контраста.»</em></p>
+                    <a href="#" class="back-home" data-page="home">← на главную</a>
+                </div>
+            `
+        },
+        color: {
+            title: "Цвет",
+            render: () => `
+                <div class="section-page">
+                    <h1>🎨 Цветовая гармония</h1>
+                    <p>Цвет передаёт настроение, температуру и пространство. Освоив базу, вы будете смешивать оттенки осознанно.</p>
+                    <h2>🟡 цветовой круг Иттена</h2>
+                    <p>Основные цвета: красный, жёлтый, синий. Составные: оранжевый, зелёный, фиолетовый. Противоположные (комплементарные) цвета создают контраст, а соседние — нюанс.</p>
+                    <div class="tip-box">
+                        <strong>🎯 гармонии:</strong><br>
+                        • Монохром — один цвет + его оттенки (спокойно)<br>
+                        • Аналоговая — 2-3 соседних цвета (уютно)<br>
+                        • Комплементарная — противоположности (динамично)<br>
+                        • Триада — три равноудалённых цвета (баланс)
+                    </div>
+                    <h2>🌡️ тёплые и холодные оттенки</h2>
+                    <p>Тёплые (красный, жёлтый, оранжевый) — приближают, создают уют. Холодные (синий, голубой, зелёный) — отдаляют, успокаивают. Работайте с температурой для передачи глубины.</p>
+                    <h2>🧪 насыщенность и значение</h2>
+                    <p>Вместо чёрного для затемнения используйте дополнительные цвета — так цвет остаётся живым. Пастельные тона + акцент ярким — модный минимализм.</p>
+                    <a href="#" class="back-home" data-page="home">← на главную</a>
+                </div>
+            `
+        },
+        composition: {
+            title: "Композиция",
+            render: () => `
+                <div class="section-page">
+                    <h1>◧ Композиция</h1>
+                    <p>Композиция управляет вниманием зрителя. Даже самый красивый рисунок теряет силу без структуры.</p>
+                    <h2>📐 правило третей</h2>
+                    <p>Разделите кадр на 9 равных частей. Ключевые объекты размещайте на линиях или в точках пересечения — это создаёт динамику.</p>
+                    <div class="tip-box">
+                        <strong>🎯 золотое сечение (1:1.618)</strong> — гармоничное деление, часто используется в классическом искусстве. Простой аналог: оставьте 2/3 пространства главному объекту.
+                    </div>
+                    <h2>🌀 ритм и направляющие</h2>
+                    <p>Повторяющиеся элементы, линии, взгляды персонажей создают маршрут для глаза. Диагонали добавляют энергию, горизонтали — покой.</p>
+                    <h2>⚖️ баланс и контраст</h2>
+                    <p>Симметрия = формальное равновесие, асимметрия = живой интерес. Чередуйте крупные и мелкие пятна, тёмное со светлым.</p>
+                    <p><strong>Пример:</strong> на натюрморте поставьте высокий предмет рядом с низким, тёмный на светлом фоне — композиция заиграет.</p>
+                    <a href="#" class="back-home" data-page="home">← на главную</a>
+                </div>
+            `
+        },
+        anatomy: {
+            title: "Анатомия",
+            render: () => `
+                <div class="section-page">
+                    <h1>🧍 Анатомия для художников</h1>
+                    <p>Понимание строения тела помогает рисовать реалистичных персонажей даже в стилизации. Начните с пропорций.</p>
+                    <h2>📏 пропорции человека (8 голов)</h2>
+                    <p>Идеализированный взрослый рост ≈ 7.5–8 голов. Плечи — около 2-х ширины головы. Талия на уровне 2.5 головы. Колени — на середине тела.</p>
+                    <div class="tip-box">
+                        <strong>🗿 быстрый чек-лист:</strong><br>
+                        • Глаза находятся на середине головы.<br>
+                        • Кончик носа — на середине между глазами и подбородком.<br>
+                        • Уши — от уровня бровей до основания носа.<br>
+                        • Локти на уровне талии, запястья — на уровне паха.
+                    </div>
+                    <h2>🦴 основные костные ориентиры</h2>
+                    <p>Ключицы, тазовые кости, лопатки, коленные чашечки — видимые точки, на которые опираются мышцы. Изучайте экоше (гипсовую голову) и скелет в движении.</p>
+                    <h2>✍️ как тренировать анатомию</h2>
+                    <p>Рисуйте быстрые жесты (gesture drawing) по 30-60 секунд. Затем переходите к конструктивному рисунку — цилиндры и кубы для рук, ног. Не уходите в детали без основы.</p>
+                    <p><em>Мини-упражнение: зарисуйте 10 разных поз из Pinterest, разбивая тело на простые геометрические формы.</em></p>
+                    <a href="#" class="back-home" data-page="home">← на главную</a>
+                </div>
+            `
+        }
+    };
+
+    // получить элемент приложения
+    const appRoot = document.getElementById('app-root');
+
+    // функция отображения страницы по ключу (pageId)
+    function renderPage(pageId) {
+        // если страницы нет — покажем home
+        if (!pages[pageId]) {
+            pageId = 'home';
+        }
+        const pageData = pages[pageId];
+        // обновляем title вкладки
+        document.title = `ХУДОЖНИК.LIGHT | ${pageData.title}`;
+        // рендерим
+        if (appRoot) {
+            appRoot.innerHTML = pageData.render();
+        }
+
+        // после рендера нужно заново навесить обработчики на все ссылки, у которых есть data-page
+        attachPageLinks();
+        // скроллим вверх для удобства
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // привязываем обработчики на все внутренние ссылки, которые переключают страницы
+    function attachPageLinks() {
+        // все элементы с data-page (кнопки, карточки, ссылки внутри main и навбара)
+        const allLinks = document.querySelectorAll('[data-page]');
+        allLinks.forEach(link => {
+            // удаляем старые обработчики, чтобы не дублировать (простой способ)
+            link.removeEventListener('click', handleLinkClick);
+            link.addEventListener('click', handleLinkClick);
+        });
+
+        // также нужно обработать ссылки внутри навбара, которые уже есть, но они тоже имеют data-page,
+        // плюс если какие-то ссылки в карточках динамические — они уже попадут в выборку.
+        // дополнительно обработаем обычные якоря, которые ведут на home (не обязательно)
+    }
+
+    function handleLinkClick(e) {
+        e.preventDefault();
+        const target = e.currentTarget;
+        const pageId = target.getAttribute('data-page');
+        if (pageId && pages[pageId]) {
+            renderPage(pageId);
+            // меняем URL hash без перезагрузки (опционально для истории)
+            window.location.hash = pageId;
+        } else if (pageId === 'home') {
+            renderPage('home');
+            window.location.hash = '';
+        } else {
+            // если нет такой страницы, но клик — просто fallback на home
+            renderPage('home');
+            window.location.hash = '';
+        }
+    }
+
+    // обработка hashChange (поддержка прямой ссылки и кнопки назад)
+    function handleHashChange() {
+        let hash = window.location.hash.slice(1); // убираем #
+        if (hash && pages[hash]) {
+            renderPage(hash);
+        } else if (hash === '') {
+            renderPage('home');
+        } else {
+            // если хэш есть, но страницы нет -> home
+            renderPage('home');
+        }
+    }
+
+    // инициализация: слушаем хэш и рендерим стартовую страницу
+    window.addEventListener('load', () => {
+        if (window.location.hash && window.location.hash.length > 1) {
+            let initialPage = window.location.hash.slice(1);
+            if (pages[initialPage]) {
+                renderPage(initialPage);
+            } else {
+                renderPage('home');
+            }
+        } else {
+            renderPage('home');
+        }
+        window.addEventListener('hashchange', handleHashChange);
+    });
+</script>
+</body>
+</html>
+```
