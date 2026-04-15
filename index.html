@@ -1,12 +1,10 @@
-Вот код современного минималистичного многостраничного сайта-гайда для начинающих художников. Использован шрифт **Inter** (модный гротеск), плавный скролл, карточки с темами и отдельные страницы для каждого раздела.
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ХУДОЖНИК.LIGHT | Гайд по основам</title>
-    <!-- Модный шрифт Inter (современный гротеск) -->
+    <!-- Modern font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -23,7 +21,7 @@
             scroll-behavior: smooth;
         }
 
-        /* минималистичная навигация */
+        /* Minimal navigation */
         .navbar {
             position: sticky;
             top: 0;
@@ -73,17 +71,16 @@
             color: #8b8b8b;
         }
 
-        /* основные контейнеры */
         .container {
             max-width: 1100px;
             margin: 0 auto;
             padding: 3rem 2rem;
         }
 
-        /* hero-секция */
+        /* Hero with image */
         .hero {
             text-align: center;
-            padding: 4rem 2rem 3rem;
+            padding: 3rem 2rem 2rem;
             background: #faf9f8;
             border-bottom: 1px solid #efefef;
         }
@@ -103,10 +100,32 @@
             font-size: 1.2rem;
             color: #4a4a4a;
             max-width: 600px;
-            margin: 0 auto;
+            margin: 0 auto 2rem auto;
         }
 
-        /* карточки-навигация по темам (сетка) */
+        /* Image block */
+        .hero-image {
+            max-width: 750px;
+            margin: 1.5rem auto 0;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 12px 28px -8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            background: #e9e6e0;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .hero-image:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Topics grid */
         .topics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -150,7 +169,7 @@
             line-height: 1.4;
         }
 
-        /* отдельный стиль для страниц-разделов */
+        /* Inner pages style */
         .section-page {
             max-width: 880px;
             margin: 0 auto;
@@ -243,14 +262,14 @@
             .container {
                 padding: 2rem 1rem;
             }
+            .hero-image {
+                border-radius: 24px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- навигация (все ссылки ведут на внутренние страницы, роутинг через hash или отдельные html? 
-     для чистоты SPA-подхода используем простые ссылки с хешами + показываем соответствующий контент через JS. 
-     Это будет минималистичный одностраничник с виртуальными "страницами" — быстро и без сервера -->
 <nav class="navbar">
     <div class="nav-container">
         <div class="logo">LIGHT·GUIDE</div>
@@ -264,9 +283,7 @@
     </div>
 </nav>
 
-<!-- основной контент: здесь будут динамически подменяться страницы -->
 <main id="app-root">
-    <!-- сюда будет вставлен контент через JS -->
     <div style="text-align: center; padding: 4rem;">Загрузка...</div>
 </main>
 
@@ -275,7 +292,15 @@
 </footer>
 
 <script>
-    // ---- Данные для каждой "страницы" (контент) ----
+    // 🔥 КРАСИВАЯ ФОТОГРАФИЯ / ИЛЛЮСТРАЦИЯ (рабочая ссылка на свободном CDN)
+    // Использую атмосферную картинку с художницей — стильная, минималистичная, подходит по теме
+    const HERO_IMAGE_URL = "https://images.pexels.com/photos/5428836/pexels-photo-5428836.jpeg?auto=compress&cs=tinysrgb&w=1200";
+    // Альтернативные варианты (раскомментируйте если нужно):
+    // https://cdn.pixabay.com/photo/2016/11/29/03/36/woman-1867093_1280.jpg
+    // https://images.pexels.com/photos/1585326/young-woman-drawing-creative-painting-1585326.jpeg?auto=compress&cs=tinysrgb&w=1200
+    // -------------------------------------------------------------
+
+    // контент страниц
     const pages = {
         home: {
             title: "Главная",
@@ -283,6 +308,9 @@
                 <div class="hero">
                     <h1>начинающим художникам</h1>
                     <p>Свет, цвет, композиция, анатомия — простые правила, которые меняют всё</p>
+                    <div class="hero-image">
+                        <img src="${HERO_IMAGE_URL}" alt="Художница за работой — творчество и вдохновение" onerror="this.onerror=null; this.src='https://placehold.co/900x600/f5f0eb/8a8a8a?text=✶+Творчество+✶';">
+                    </div>
                 </div>
                 <div class="container">
                     <h2 style="font-weight:500; margin-bottom:1rem;">основные разделы</h2>
@@ -406,42 +434,25 @@
         }
     };
 
-    // получить элемент приложения
     const appRoot = document.getElementById('app-root');
 
-    // функция отображения страницы по ключу (pageId)
     function renderPage(pageId) {
-        // если страницы нет — покажем home
-        if (!pages[pageId]) {
-            pageId = 'home';
-        }
+        if (!pages[pageId]) pageId = 'home';
         const pageData = pages[pageId];
-        // обновляем title вкладки
         document.title = `ХУДОЖНИК.LIGHT | ${pageData.title}`;
-        // рендерим
         if (appRoot) {
             appRoot.innerHTML = pageData.render();
         }
-
-        // после рендера нужно заново навесить обработчики на все ссылки, у которых есть data-page
         attachPageLinks();
-        // скроллим вверх для удобства
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // привязываем обработчики на все внутренние ссылки, которые переключают страницы
     function attachPageLinks() {
-        // все элементы с data-page (кнопки, карточки, ссылки внутри main и навбара)
         const allLinks = document.querySelectorAll('[data-page]');
         allLinks.forEach(link => {
-            // удаляем старые обработчики, чтобы не дублировать (простой способ)
             link.removeEventListener('click', handleLinkClick);
             link.addEventListener('click', handleLinkClick);
         });
-
-        // также нужно обработать ссылки внутри навбара, которые уже есть, но они тоже имеют data-page,
-        // плюс если какие-то ссылки в карточках динамические — они уже попадут в выборку.
-        // дополнительно обработаем обычные якоря, которые ведут на home (не обязательно)
     }
 
     function handleLinkClick(e) {
@@ -450,40 +461,27 @@
         const pageId = target.getAttribute('data-page');
         if (pageId && pages[pageId]) {
             renderPage(pageId);
-            // меняем URL hash без перезагрузки (опционально для истории)
-            window.location.hash = pageId;
-        } else if (pageId === 'home') {
-            renderPage('home');
-            window.location.hash = '';
+            window.location.hash = pageId === 'home' ? '' : pageId;
         } else {
-            // если нет такой страницы, но клик — просто fallback на home
             renderPage('home');
             window.location.hash = '';
         }
     }
 
-    // обработка hashChange (поддержка прямой ссылки и кнопки назад)
     function handleHashChange() {
-        let hash = window.location.hash.slice(1); // убираем #
+        let hash = window.location.hash.slice(1);
         if (hash && pages[hash]) {
             renderPage(hash);
-        } else if (hash === '') {
-            renderPage('home');
         } else {
-            // если хэш есть, но страницы нет -> home
             renderPage('home');
         }
     }
 
-    // инициализация: слушаем хэш и рендерим стартовую страницу
     window.addEventListener('load', () => {
         if (window.location.hash && window.location.hash.length > 1) {
             let initialPage = window.location.hash.slice(1);
-            if (pages[initialPage]) {
-                renderPage(initialPage);
-            } else {
-                renderPage('home');
-            }
+            if (pages[initialPage]) renderPage(initialPage);
+            else renderPage('home');
         } else {
             renderPage('home');
         }
@@ -492,4 +490,3 @@
 </script>
 </body>
 </html>
-```
